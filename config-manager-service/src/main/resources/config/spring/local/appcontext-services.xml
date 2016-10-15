@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--<context:property-placeholder location="classpath*:properties/forseti-fp-dubbo.properties.dev" ignore-unresolvable="true"/>-->
+
+    <!-- 具体的实现bean -->
+    <bean id="configManagerService" class="com.chyun.config.manager.biz.service.impl.ConfigManagerServiceImpl" />
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="config-manager-service" />
+
+    <!-- 使用multicast广播注册中心暴露服务地址 <dubbo:registry address="multicast://224.5.6.7:1234"/> -->
+    <!-- see http://dubbo.proxy-dev.fraudmetrix.cn/sysinfo/versions -->
+    <!--<dubbo:registry group="${forseti.fp.dubbo.zookeeper.root}" address="${forseti.fp.dubbo.zookeeper}" protocol="zookeeper"/>-->
+    <!-- 使用zookeeper注册中心暴露服务地址 <dubbo:registry address="zookeeper://192.168.1.166:2181"
+        /> -->
+    <dubbo:registry address="N/A" />
+
+    <dubbo:protocol name="dubbo" dispatcher="all" threadpool="fixed" threads="200" port="10880"/>
+
+    <!-- 用dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="10880" />
+
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="com.chyun.config.manager.api.ConfigManagerService"
+                   ref="configManagerService" />
+</beans>
