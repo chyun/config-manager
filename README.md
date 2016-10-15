@@ -1,1 +1,1 @@
-这是一个基于zookeeper的配置系统
+基于zookeeper的分布式配置中心
