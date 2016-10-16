@@ -6,6 +6,8 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 
+import java.util.List;
+
 /**
  * 类的实现描述: Created by Calix on 15/10/16.
  */
@@ -77,6 +79,12 @@ public class RemoteConfigManager {
     public byte[] read(String schema, String key) throws Exception {
         final String keyPath = generateKeyPath(schema, key);
         return zkClient.getData().forPath(keyPath);
+    }
+
+    public List<String> readChildren(String schema) throws Exception {
+        final String keyPath = generateServicePath(schema);
+        List<String> children = zkClient.getChildren().forPath(keyPath);
+        return children;
     }
 
     public void setZkConnectString(String zkConnectString) {
